@@ -60,7 +60,7 @@ def ani(g):
     for i in g:
         dur=speed-curlevel
         i.anchor=("center","bottom")
-        animation=animate(i,duration=dur,on_finished=gameislost())
+        animation=animate(i,duration=dur,on_finished=gameislost,y=600)
         anim.append(animation)
 
 def gameislost():
