@@ -11,6 +11,7 @@ badstuff=["bag","battery","bottle","chips"]
 stagedis=[]
 
 def draw():
+    global gamelose,gamewin,stagedis
     screen.fill((144,212,142))
     if gamelose:
         screen.draw.text("Recycle plsss come again",fontsize=50,color=((33,18,64)))
@@ -33,9 +34,9 @@ def master(r):
     return theactors
 
 
-def popul(r):
+def popul(ppl):
     thestage=["paper"]
-    for i in range(r):
+    for i in range(ppl):
         ran=random.choice(badstuff)
         thestage.append(ran)
     return thestage
@@ -47,30 +48,39 @@ def accimage(thestage):
         theactors.append(thing)
     return theactors
 
-def layout(y):
-    noofgaps=len(y)+1
+def layout(itemslayout):
+    noofgaps=len(itemslayout)+1
     gapsize=800/noofgaps
-    random.shuffle(y)
-    for i,j in enumerate(y,1):
-        xpos=i*gapsize
-        j.x=xpos
-    
+    random.shuffle(itemslayout)
+    for i,j in enumerate(itemslayout,1):
+        thexpos=i*gapsize
+        j.x=thexpos
+
 
 def ani(smoothmotion):
     global anim
     for i in smoothmotion:
-        dur=speed-curlevel
+        dur=max(1,speed-curlevel)
         i.anchor=("center","bottom")
-        animation=animate(i,duration=dur,on_finished=gameislost,y=600)
+        animation=animate(i,duration=dur,on_finished=gameislost,y=HEIGHT)
         anim.append(animation)
 
-def gameislost():
+def gameislost(actor=None):
     global gamelose
     gamelose=True
 
+def on_mouse_down(pos):
+    for i in stagedis:
+        if i.collidepoint(pos):
+            if "paper" in i.image:
+                gameiswin()
+            else:
+                gameislost()
+
+
 def gameiswin():
-    global gamewin,stagedis,anim
-    stopanim()
+    global gamewin,stagedis,anim,curlevel
+    stopanim(anim)
     if curlevel==levels:
         gamewin=True
     else:
@@ -83,13 +93,6 @@ def stopanim(hi):
         if i.running:
             i.stop()
 
-def on_mouse_down(pos):
-    for i in stagedis:
-        if i.collidepoint(pos):
-            if "bag" in i.image:
-                gameiswin()
-            else:
-                gameislost()
 
 
 pgzrun.go()
