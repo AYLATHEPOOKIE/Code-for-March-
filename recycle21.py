@@ -50,14 +50,15 @@ def accimage(thestage):
 def layout(y):
     noofgaps=len(y)+1
     gapsize=800/noofgaps
+    random.shuffle(y)
     for i,j in enumerate(y,1):
         xpos=i*gapsize
         j.x=xpos
-    random.shuffle(y)
+    
 
-def ani(g):
+def ani(smoothmotion):
     global anim
-    for i in g:
+    for i in smoothmotion:
         dur=speed-curlevel
         i.anchor=("center","bottom")
         animation=animate(i,duration=dur,on_finished=gameislost,y=600)
@@ -66,6 +67,29 @@ def ani(g):
 def gameislost():
     global gamelose
     gamelose=True
+
+def gameiswin():
+    global gamewin,stagedis,anim
+    stopanim()
+    if curlevel==levels:
+        gamewin=True
+    else:
+        curlevel+=1
+        stagedis=[]
+        anim=[]
+
+def stopanim(hi):
+    for i in hi:
+        if i.running:
+            i.stop()
+
+def on_mouse_down(pos):
+    for i in stagedis:
+        if i.collidepoint(pos):
+            if "bag" in i.image:
+                gameiswin()
+            else:
+                gameislost()
 
 
 pgzrun.go()
