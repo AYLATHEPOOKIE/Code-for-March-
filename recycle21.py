@@ -14,9 +14,9 @@ def draw():
     global gamelose,gamewin,stagedis
     screen.fill((144,212,142))
     if gamelose:
-        screen.draw.text("Recycle plsss come again",fontsize=50,color=((33,18,64)))
+        screen.draw.text("Recycle plsss come again",center=(400,100),fontsize=50,color=((33,18,64)))
     elif gamewin:
-        screen.draw.text("yaay!",fontsize=50,color=((33,18,64)))
+        screen.draw.text("yaay!",center=(400,100),fontsize=50,color=((33,18,64)))
     else:
         for i in stagedis:
             i.draw()
@@ -34,9 +34,9 @@ def master(r):
     return theactors
 
 
-def popul(ppl):
+def popul(r):
     thestage=["paper"]
-    for i in range(ppl):
+    for i in range(r):
         ran=random.choice(badstuff)
         thestage.append(ran)
     return thestage
@@ -70,6 +70,7 @@ def gameislost(actor=None):
     gamelose=True
 
 def on_mouse_down(pos):
+    global stagedis
     for i in stagedis:
         if i.collidepoint(pos):
             if "paper" in i.image:
